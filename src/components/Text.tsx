@@ -35,18 +35,22 @@ type Size =
 
 type Variant = 'primary' | 'secondary';
 
+type Align = 'center' | 'left' | 'right';
+
 type Props = {
   variant?: Variant;
   weight?: Wight;
   size?: Size;
   disabled?: boolean;
   style?: StyleProp<TextStyle> | undefined;
+  align?: Align;
 } & TextProps;
 
 const Text = ({
   variant = 'primary',
   weight = 'regular',
   size = 'body',
+  align = 'left',
   disabled,
   style,
   ...props
@@ -116,12 +120,24 @@ const Text = ({
     }
   }, [size]);
 
+  const alignStyle = useMemo(() => {
+    switch (align) {
+      case 'center':
+        return styles.center;
+      case 'right':
+        return styles.right;
+      default:
+        return styles.left;
+    }
+  }, [align]);
+
   return (
     <RNText
       style={[
         themeStyle,
         wightStyle,
         sizeStyle,
+        alignStyle,
         disabled && txtDisableStyle,
         style,
       ]}
@@ -193,6 +209,15 @@ const styles = StyleSheet.create({
   },
   caption2: {
     fontSize: getFontSize(11),
+  },
+  center: {
+    textAlign: 'center',
+  },
+  left: {
+    textAlign: 'left',
+  },
+  right: {
+    textAlign: 'right',
   },
 });
 

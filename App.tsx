@@ -11,7 +11,9 @@
 import React, {useEffect} from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import 'react-native-gesture-handler';
+import {Provider} from 'react-redux';
 import RootRouter from './src/routes/RootRouter';
+import store from './src/states/store';
 
 const App = () => {
   useEffect(() => {
@@ -22,7 +24,12 @@ const App = () => {
       await RNBootSplash.hide({fade: true});
     });
   }, []);
-  return <RootRouter />;
+
+  return (
+    <Provider store={store}>
+      <RootRouter />
+    </Provider>
+  );
 };
 
 export default App;

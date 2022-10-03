@@ -1,8 +1,6 @@
 import React, {PropsWithChildren, useMemo} from 'react';
-import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import useStyles from '../hooks/useStyles';
-import useIsDarkMode from '../hooks/useIsDarkMode';
+import {ScrollView, StatusBar, View} from 'react-native';
+import useContainer from '../hooks/useContainer';
 
 type Props = {
   withHeader?: boolean;
@@ -16,10 +14,13 @@ const Container = ({
   mode = 'view',
   hideScrollbar = true,
 }: PropsWithChildren<Props>) => {
-  const insets = useSafeAreaInsets();
-  const {bgPrimaryStyle, bgSecondaryColor} = useStyles();
-  const isDarkMode = useIsDarkMode();
-
+  const {
+    containerStyle,
+    containerContentStyle,
+    statusBarStyle,
+    statusBarBackgroundColor,
+    statusBarAnimated,
+  } = useContainer(withHeader);
   const Wrapper = useMemo(() => {
     switch (mode) {
       case 'scroll':
@@ -31,29 +32,20 @@ const Container = ({
 
   return (
     <Wrapper
-      style={[styles.container, {paddingBottom: insets.bottom}, bgPrimaryStyle]}
-      contentContainerStyle={[
-        !withHeader && {paddingTop: insets.top},
-        {paddingBottom: insets.bottom},
-      ]}
+      style={containerStyle}
+      contentContainerStyle={containerContentStyle}
       showsHorizontalScrollIndicator={!hideScrollbar}
       showsVerticalScrollIndicator={!hideScrollbar}>
       {!withHeader && (
         <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={bgSecondaryColor}
-          animated={true}
+          barStyle={statusBarStyle}
+          backgroundColor={statusBarBackgroundColor}
+          animated={statusBarAnimated}
         />
       )}
       {children}
     </Wrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default Container;

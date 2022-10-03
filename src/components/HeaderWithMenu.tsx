@@ -1,5 +1,5 @@
 import React from 'react';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import {LayoutChangeEvent, StatusBar, StyleSheet, View} from 'react-native';
 import useIsDarkMode from '../hooks/useIsDarkMode';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useStyles from '../hooks/useStyles';
@@ -12,9 +12,10 @@ import getSize from '../utils/getSize';
 type Props = {
   title?: string;
   subtitle?: string;
+  onLayout?: (event: LayoutChangeEvent) => void;
 };
 
-const HeaderWithMenu = ({}: Props) => {
+const HeaderWithMenu = ({onLayout}: Props) => {
   const insets = useSafeAreaInsets();
   const isDarkMode = useIsDarkMode();
   const {bgPrimaryColor} = useStyles();
@@ -27,6 +28,7 @@ const HeaderWithMenu = ({}: Props) => {
         animated={true}
       />
       <View
+        onLayout={onLayout}
         style={[
           styles.container,
           {

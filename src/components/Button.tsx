@@ -12,6 +12,7 @@ import getSize from '../utils/getSize';
 type Size = 'small' | 'regular' | 'large' | 'extra-large';
 type Variant = 'primary' | 'secondary';
 type Mode = 'full';
+type Align = 'left' | 'center' | 'right' | 'full';
 
 type Props = {
   size?: Size;
@@ -20,9 +21,17 @@ type Props = {
   disabled?: boolean;
   text?: string;
   mode?: Mode;
+  align?: Align;
 };
 
-const Button = ({size, variant, onPress, disabled = false, text}: Props) => {
+const Button = ({
+  size,
+  variant,
+  onPress,
+  disabled = false,
+  text,
+  align = 'full',
+}: Props) => {
   const isDarkMode = useIsDarkMode();
 
   const sizeStyle = useMemo(() => {
@@ -47,12 +56,25 @@ const Button = ({size, variant, onPress, disabled = false, text}: Props) => {
     }
   }, [variant, isDarkMode]);
 
+  const alignStyle = useMemo(() => {
+    switch (align) {
+      case 'left':
+        return styles.left;
+      case 'center':
+        return styles.center;
+      case 'right':
+        return styles.regular;
+      default:
+        return styles.full;
+    }
+  }, [align]);
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={onPress}
       disabled={disabled}
-      style={[styles.button, sizeStyle, variantStyle]}>
+      style={[styles.button, sizeStyle, variantStyle, alignStyle]}>
       <Text style={styles.text} size={'heading3'} weight={'bold'}>
         {text}
       </Text>
@@ -66,6 +88,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   button: {
+    minWidth: '80%',
     paddingHorizontal: getSize(16),
     borderRadius: getSize(14),
   },
@@ -82,10 +105,10 @@ const styles = StyleSheet.create({
     paddingVertical: getSize(16),
   },
   primaryDark: {
-    backgroundColor: DarkColors.redTosca,
+    backgroundColor: DarkColors.yellowTosca,
   },
   primaryLight: {
-    backgroundColor: LightColors.redTosca,
+    backgroundColor: LightColors.yellowTosca,
   },
   secondaryDark: {
     backgroundColor: DarkColors.grey,
@@ -93,6 +116,16 @@ const styles = StyleSheet.create({
   secondaryLight: {
     backgroundColor: LightColors.grey,
   },
+  left: {
+    alignSelf: 'flex-start',
+  },
+  center: {
+    alignSelf: 'flex-end',
+  },
+  right: {
+    alignSelf: 'center',
+  },
+  full: {},
 });
 
 export default Button;

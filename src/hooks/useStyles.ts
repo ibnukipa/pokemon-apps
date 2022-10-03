@@ -32,9 +32,9 @@ const useStyles = () => {
 
   const bgSecondaryStyle = useMemo(() => {
     if (isDarkMode) {
-      return styles.bgPrimaryDark;
+      return styles.bgSecondaryDark;
     } else {
-      return styles.bgPrimaryLight;
+      return styles.bgSecondaryLight;
     }
   }, [isDarkMode]);
 
@@ -48,17 +48,17 @@ const useStyles = () => {
 
   const txtSecondaryStyle = useMemo(() => {
     if (isDarkMode) {
-      return styles.txtSecondaryLight;
-    } else {
       return styles.txtSecondaryDark;
+    } else {
+      return styles.txtSecondaryLight;
     }
   }, [isDarkMode]);
 
   const txtDisableStyle = useMemo(() => {
     if (isDarkMode) {
-      return styles.txtDisableLight;
-    } else {
       return styles.txtDisableDark;
+    } else {
+      return styles.txtDisableLight;
     }
   }, [isDarkMode]);
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   txtSecondaryDark: {
-    color: Colors.blackLighter,
+    color: Colors.blackBright,
   },
   txtSecondaryLight: {
     color: Colors.greyDarker,
