@@ -13,6 +13,9 @@ import PokemonTypePill from '../components/Pokemon/PokemonTypePill';
 import PokemonAbilityPill from '../components/Pokemon/PokemonAbilityPill';
 import PokemonStatPill from '../components/Pokemon/PokemonStatPill';
 import PokemonSpritePill from '../components/Pokemon/PokemonSpritePill';
+import usePokemonSpecie from '../hooks/usePokemonSpecie';
+import useEvolutionChain from '../hooks/useEvolutionChain';
+import PokemonEvolutionPill from '../components/Pokemon/PokemonEvolutionPill';
 
 const PokemonScreen = () => {
   const route = useRoute<RouteProp<RouteList, 'Pokemon'>>();
@@ -26,7 +29,10 @@ const PokemonScreen = () => {
     pokemonAbilities,
     pokemonSprites,
     pokemonStats,
-  } = usePokemon(route.params?.id);
+  } = usePokemon(route.params?.itemKey);
+
+  const {pokemonSpecieEvoChain} = usePokemonSpecie(route.params?.itemKey);
+  const {evolutionChains} = useEvolutionChain(pokemonSpecieEvoChain);
 
   const renderAbility = useCallback((ability: any) => {
     return (
@@ -58,6 +64,20 @@ const PokemonScreen = () => {
     );
   }, []);
 
+  const renderEvolution = useCallback(
+    ({item, index}: any) => {
+      return (
+        <PokemonEvolutionPill
+          itemKey={item}
+          index={index}
+          isLastItem={evolutionChains.length - 1 === index}
+          isCurrentPokemon={item === pokemon.name}
+        />
+      );
+    },
+    [evolutionChains.length, pokemon.name],
+  );
+
   return (
     <>
       <HeaderWithMenu />
@@ -85,13 +105,13 @@ const PokemonScreen = () => {
           </View>
           <View style={[styles.itemContentContainer, contentContainerStyle]}>
             <View style={styles.item}>
-              <Text size={'subhead'} disabled weight={'semi-bold'}>
+              <Text size={'subhead'} variant={'secondary'} weight={'semi-bold'}>
                 WEIGHT
               </Text>
               <Text weight={'medium'}>{pokemon.weight}</Text>
             </View>
             <View style={styles.item}>
-              <Text size={'subhead'} disabled weight={'semi-bold'}>
+              <Text size={'subhead'} variant={'secondary'} weight={'semi-bold'}>
                 HEIGHT
               </Text>
               <Text weight={'medium'}>{pokemon.height}</Text>
@@ -149,6 +169,21 @@ const PokemonScreen = () => {
               data={pokemonStats}
               style={styles.itemContentRowContainer}
               renderItem={renderStat}
+              numColumns={3}
+            />
+          </View>
+        </View>
+        <View style={[styles.itemContainer]}>
+          <View style={styles.itemTitle}>
+            <Text variant={'secondary'} size={'footnote'} weight={'semi-bold'}>
+              EVOLUTION
+            </Text>
+          </View>
+          <View>
+            <FlatList
+              data={evolutionChains}
+              style={styles.itemContentRowContainer}
+              renderItem={renderEvolution}
               numColumns={3}
             />
           </View>

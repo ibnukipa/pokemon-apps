@@ -8,6 +8,7 @@ type Props = {
   height?: number;
   width?: number | string;
   align?: 'left' | 'center' | 'right';
+  opacity?: number;
 };
 
 const Illustration = ({
@@ -15,6 +16,7 @@ const Illustration = ({
   source,
   align,
   aspectRatio = 1,
+  opacity = 1,
 }: Props) => {
   const alignStyle = useMemo(() => {
     switch (align) {
@@ -40,14 +42,23 @@ const Illustration = ({
   if (isUriSvg) {
     return (
       <View style={[{width, aspectRatio}, alignStyle]}>
-        <SvgUri width={'100%'} height={'100%'} uri={source?.uri} />
+        <SvgUri
+          opacity={opacity}
+          width={'100%'}
+          height={'100%'}
+          uri={source?.uri}
+        />
       </View>
     );
   }
 
   return (
     <View style={[{width, aspectRatio}, alignStyle]}>
-      <Image resizeMode={'contain'} source={source} style={styles.image} />
+      <Image
+        resizeMode={'contain'}
+        source={source}
+        style={[styles.image, {opacity}]}
+      />
     </View>
   );
 };

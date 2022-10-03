@@ -14,12 +14,12 @@ import {useNavigation} from '@react-navigation/native';
 import useStyles from '../../hooks/useStyles';
 
 type Props = {
-  id: number | string;
+  itemKey: number | string;
 };
 
-const PokemonCard = memo(({id}: Props) => {
+const PokemonCard = memo(({itemKey}: Props) => {
   const isDarkMode = useIsDarkMode();
-  const navigation = useNavigation<PokemonScreenNavigationProp>();
+  const navigation = useNavigation<RouteScreenNavigationProp>();
 
   const {contentContainerStyle} = useStyles();
   const {
@@ -28,11 +28,11 @@ const PokemonCard = memo(({id}: Props) => {
     pokemonCode,
     pokemonTypes,
     pokemonIsLoading,
-  } = usePokemon(id);
+  } = usePokemon(itemKey);
 
   const pokemonPress = useCallback(() => {
-    navigation.navigate('Pokemon', {id});
-  }, [id, navigation]);
+    navigation.navigate('Pokemon', {itemKey});
+  }, [itemKey, navigation]);
 
   const containerStyle = useMemo(() => {
     if (isDarkMode) {

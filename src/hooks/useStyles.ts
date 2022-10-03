@@ -108,10 +108,10 @@ const styles = StyleSheet.create({
     color: Colors.greyDarker,
   },
   txtDisableDark: {
-    color: Colors.blackBright,
+    color: Colors.blackLighter,
   },
   txtDisableLight: {
-    color: Colors.greyDarken,
+    color: Colors.grey,
   },
   contentContainerDark: {
     backgroundColor: Colors.white03,

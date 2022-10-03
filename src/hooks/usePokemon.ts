@@ -7,16 +7,24 @@ import {getByIdSelector} from '../states/reducers/db';
 import useData from './useData';
 import getPokemon from '../sevices/getPokemon';
 
-const usePokemon = (id: number | string) => {
+const OMITTED_ATTRS = [
+  'forms',
+  'game_indices',
+  'held_items',
+  'moves',
+  'past_types',
+];
+
+const usePokemon = (itemKey: number | string) => {
   const pokemon = useAppSelector(state =>
-    getByIdSelector(state, {model: 'pokemons', id}),
+    getByIdSelector(state, {model: 'pokemons', id: itemKey}),
   );
 
   const {refresh, isLoading} = useData({
     fetcher: getPokemon,
     model: 'pokemons',
-    id,
-    omitKeys: ['forms', 'game_indices', 'held_items', 'moves', 'past_types'],
+    id: itemKey,
+    omitKeys: OMITTED_ATTRS,
   });
 
   const pokemonSource: ImageProps['source'] = useMemo(() => {
@@ -92,7 +100,7 @@ const usePokemon = (id: number | string) => {
     if (!pokemon.height || !pokemon.weight) {
       refresh();
     }
-  }, [pokemon, refresh]);
+  }, [pokemon?.height, pokemon?.weight, refresh]);
 
   return {
     pokemon,

@@ -4,6 +4,8 @@ import {forIn, isEmpty} from 'lodash';
 // TODO move to local database instead
 const initialDbState = {
   pokemons: {},
+  pokemonSpecies: {},
+  evolutionChains: {},
   pokemonTypes: {},
 };
 

@@ -13,11 +13,14 @@ type Props = {
 const PokemonAbilityPill = ({ability, disabled}: Props) => {
   return (
     <View style={[styles.container]}>
-      <Text size={'subhead'} disabled={disabled} weight={'medium'}>
+      <Text
+        size={'subhead'}
+        variant={disabled ? 'secondary' : 'primary'}
+        weight={'medium'}>
         {startCase(ability)}
       </Text>
       {disabled && (
-        <Text disabled size={'footnote'}>
+        <Text variant={'secondary'} size={'footnote'}>
           (hidden)
         </Text>
       )}

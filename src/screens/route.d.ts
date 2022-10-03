@@ -1,10 +1,10 @@
 type RouteList = {
   Pokemon: {
-    id: number;
+    itemKey: number;
   };
 };
 
-type PokemonScreenNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabParamList, 'Pokemon'>,
+type RouteScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabParamList>,
   StackNavigationProp<StackParamList>
 >;
