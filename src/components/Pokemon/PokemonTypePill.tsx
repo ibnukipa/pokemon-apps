@@ -47,11 +47,11 @@ const PokemonTypePill = ({type}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1 / 3,
     borderRadius: getSize(25),
-    margin: 4,
     paddingHorizontal: getSize(10),
     paddingVertical: getSize(5),
-    minWidth: '25%',
+    margin: getSize(4),
   },
   text: {
     color: Colors.white,

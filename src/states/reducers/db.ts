@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {forEach, forIn, isEmpty} from 'lodash';
+import {forIn, isEmpty} from 'lodash';
 
 // TODO move to local database instead
 const initialDbState = {
@@ -52,9 +52,6 @@ export const dbSlice = createSlice({
       if (model) {
         state[model] = {};
       }
-    },
-    reset: (state: any) => {
-      state = initialDbState;
     },
   },
 });

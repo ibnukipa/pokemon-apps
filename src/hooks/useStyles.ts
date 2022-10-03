@@ -62,6 +62,14 @@ const useStyles = () => {
     }
   }, [isDarkMode]);
 
+  const contentContainerStyle = useMemo(() => {
+    if (isDarkMode) {
+      return styles.contentContainerDark;
+    } else {
+      return styles.contentContainerLight;
+    }
+  }, [isDarkMode]);
+
   return {
     bgPrimaryColor,
     bgPrimaryStyle,
@@ -70,6 +78,7 @@ const useStyles = () => {
     txtPrimaryStyle,
     txtSecondaryStyle,
     txtDisableStyle,
+    contentContainerStyle,
   };
 };
 
@@ -103,6 +112,12 @@ const styles = StyleSheet.create({
   },
   txtDisableLight: {
     color: Colors.greyDarken,
+  },
+  contentContainerDark: {
+    backgroundColor: Colors.white03,
+  },
+  contentContainerLight: {
+    backgroundColor: Colors.black03,
   },
 });
 
