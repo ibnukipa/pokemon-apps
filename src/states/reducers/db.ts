@@ -1,9 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {forEach, forIn, isEmpty} from 'lodash';
+import {forIn, isEmpty} from 'lodash';
 
 // TODO move to local database instead
 const initialDbState = {
   pokemons: {},
+  pokemonSpecies: {},
+  evolutionChains: {},
   pokemonTypes: {},
 };
 
@@ -52,9 +54,6 @@ export const dbSlice = createSlice({
       if (model) {
         state[model] = {};
       }
-    },
-    reset: (state: any) => {
-      state = initialDbState;
     },
   },
 });

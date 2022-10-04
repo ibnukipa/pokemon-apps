@@ -1,12 +1,14 @@
 import React, {useMemo} from 'react';
-import {Image, StyleSheet, ImageProps} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
+import {SvgUri} from 'react-native-svg';
 
 type Props = {
-  source: ImageProps['source'];
+  source: any;
   aspectRatio: number;
   height?: number;
   width?: number | string;
   align?: 'left' | 'center' | 'right';
+  opacity?: number;
 };
 
 const Illustration = ({
@@ -14,6 +16,7 @@ const Illustration = ({
   source,
   align,
   aspectRatio = 1,
+  opacity = 1,
 }: Props) => {
   const alignStyle = useMemo(() => {
     switch (align) {
@@ -26,25 +29,44 @@ const Illustration = ({
     }
   }, [align]);
 
+  const isUriSvg = useMemo(() => {
+    const uri = source?.uri;
+    let ext = '';
+    if (uri) {
+      ext = uri.substring(uri.lastIndexOf('.'));
+    }
+
+    return ext === '.svg';
+  }, [source]);
+
+  if (isUriSvg) {
+    return (
+      <View style={[{width, aspectRatio}, alignStyle]}>
+        <SvgUri
+          opacity={opacity}
+          width={'100%'}
+          height={'100%'}
+          uri={source?.uri}
+        />
+      </View>
+    );
+  }
+
   return (
-    <Image
-      resizeMode={'contain'}
-      source={source}
-      style={[
-        styles.image,
-        {
-          aspectRatio,
-          width,
-        },
-        alignStyle,
-      ]}
-    />
+    <View style={[{width, aspectRatio}, alignStyle]}>
+      <Image
+        resizeMode={'contain'}
+        source={source}
+        style={[styles.image, {opacity}]}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   image: {
-    height: undefined,
+    width: '100%',
+    height: '100%',
   },
   left: {
     alignSelf: 'flex-start',

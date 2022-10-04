@@ -1,78 +1,52 @@
-import React, {memo, useEffect, useMemo} from 'react';
-import {ImageProps, StyleSheet, View} from 'react-native';
+import React, {memo, useCallback, useMemo} from 'react';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Text from '../Text';
-import useData from '../../hooks/useData';
-import getPokemon from '../../sevices/getPokemon';
-import useAppSelector from '../../hooks/useAppSelector';
-import {getByIdSelector} from '../../states/reducers/db';
 import useIsDarkMode from '../../hooks/useIsDarkMode';
 import Colors from '../../constants/Colors';
 import getSize from '../../utils/getSize';
 import Illustration from '../Illustration';
-import {isEmpty, padStart, startCase} from 'lodash';
+import {isEmpty} from 'lodash';
 import Divider from '../Divider';
 import PokemonTypePill from './PokemonTypePill';
-import Logo from '../../assets/logo.png';
 import LoadingFill from '../LoadingFill';
+import usePokemon from '../../hooks/usePokemon';
+import {useNavigation} from '@react-navigation/native';
+import useStyles from '../../hooks/useStyles';
 
 type Props = {
-  id: number | string;
+  itemKey: number | string;
 };
 
-const useContainerStyle = () => {
+const PokemonCard = memo(({itemKey}: Props) => {
   const isDarkMode = useIsDarkMode();
-  return useMemo(() => {
+  const navigation = useNavigation<RouteScreenNavigationProp>();
+
+  const {contentContainerStyle} = useStyles();
+  const {
+    pokemonSource,
+    pokemonName,
+    pokemonCode,
+    pokemonTypes,
+    pokemonIsLoading,
+  } = usePokemon(itemKey);
+
+  const pokemonPress = useCallback(() => {
+    navigation.navigate('Pokemon', {itemKey});
+  }, [itemKey, navigation]);
+
+  const containerStyle = useMemo(() => {
     if (isDarkMode) {
       return styles.containerDark;
     } else {
       return styles.containerLight;
     }
   }, [isDarkMode]);
-};
-
-const PokemonCard = memo(({id}: Props) => {
-  const isDarkMode = useIsDarkMode();
-  const containerStyle = useContainerStyle();
-
-  const pokemon = useAppSelector(state =>
-    getByIdSelector(state, {model: 'pokemons', id}),
-  );
-
-  const {refresh, isLoading} = useData({
-    fetcher: getPokemon,
-    model: 'pokemons',
-    id,
-    omitKeys: ['abilities', 'forms', 'game_indices', 'held_items', 'moves'],
-  });
-
-  const pokemonSource: ImageProps['source'] = useMemo(() => {
-    const pokemonUri =
-      pokemon.sprites?.other?.['official-artwork']?.front_default;
-    if (isLoading || !pokemonUri) {
-      return Logo;
-    } else {
-      return {
-        uri: pokemonUri,
-      };
-    }
-  }, [isLoading, pokemon.sprites?.other]);
-
-  const pokemonCode: string = useMemo(() => {
-    return `#${padStart(isLoading ? '0' : pokemon.id, 4, '0')}`;
-  }, [isLoading, pokemon.id]);
-
-  const pokemonName: string = useMemo(() => {
-    return isLoading ? 'Pokè Name' : startCase(pokemon.name);
-  }, [isLoading, pokemon.name]);
-
-  useEffect(() => {
-    if (!pokemon.height || !pokemon.weight) {
-      refresh();
-    }
-  }, [pokemon, refresh]);
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={pokemonPress}
+      style={[styles.container, containerStyle]}>
       <View style={styles.illustrationContainer}>
         <Illustration
           width={'80%'}
@@ -81,13 +55,7 @@ const PokemonCard = memo(({id}: Props) => {
           aspectRatio={1}
         />
       </View>
-      <View
-        style={[
-          styles.contentContainer,
-          isDarkMode
-            ? styles.contentContainerDark
-            : styles.contentContainerLight,
-        ]}>
+      <View style={[styles.contentContainer, contentContainerStyle]}>
         <Text variant={'secondary'} size={'subhead'} weight={'bold'}>
           {pokemonCode}
         </Text>
@@ -95,21 +63,24 @@ const PokemonCard = memo(({id}: Props) => {
         <Text weight={'bold'} size={'heading2'}>
           {pokemonName}
         </Text>
-        {!isEmpty(pokemon.types) && (
+        {!isEmpty(pokemonTypes) && (
           <>
             <Divider size={'small'} />
-            <View style={styles.typeContainer}>
-              {pokemon.types.map((item: any) => {
-                return (
-                  <PokemonTypePill key={item.type.name} type={item.type.name} />
-                );
-              })}
+            <View>
+              <FlatList
+                data={pokemonTypes}
+                style={styles.typeContainer}
+                renderItem={({item}) => (
+                  <PokemonTypePill key={item} type={item} />
+                )}
+                numColumns={3}
+              />
             </View>
           </>
         )}
       </View>
-      {isLoading && <LoadingFill borderRadius={getSize(24)} />}
-    </View>
+      {pokemonIsLoading && <LoadingFill borderRadius={getSize(24)} />}
+    </TouchableOpacity>
   );
 });
 
@@ -132,17 +103,8 @@ const styles = StyleSheet.create({
     padding: getSize(15),
     borderRadius: getSize(15),
   },
-  contentContainerDark: {
-    backgroundColor: Colors.white03,
-  },
-  contentContainerLight: {
-    backgroundColor: Colors.black03,
-  },
   typeContainer: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    marginHorizontal: -4,
-    marginVertical: -4,
+    marginHorizontal: -getSize(4),
   },
 });
 

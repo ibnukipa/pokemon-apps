@@ -49,13 +49,9 @@ const useInfiniteList = ({fetcher, query, model}: Props) => {
             const newData: any = [];
             const mappedData = responseResult.reduce(
               (result: any, item: any) => {
-                const parts = item.url.split('/');
-                const id = parts[parts.length - 2];
-                result[id] = {
-                  ...item,
-                  id,
-                };
-                newData.push(id);
+                const itemKey = item.name;
+                result[itemKey] = item;
+                newData.push(itemKey);
                 return result;
               },
               {},

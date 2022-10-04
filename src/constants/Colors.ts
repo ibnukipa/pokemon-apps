@@ -38,6 +38,14 @@ const basicColors = {
   steel: '#B8B8D0',
   unknown: '#67A090',
   water: '#6790F0',
+  hp: '#FE0100',
+  attack: '#EE7F2F',
+  defense: '#F6CF2F',
+  ['special-attack']: '#6A8DF2',
+  ['special-defense']: '#77C84F',
+  speed: '#F85687',
+  accuracy: '#4B4BA2',
+  evasion: '#A44C4A',
 };
 
 export const LightColors = {

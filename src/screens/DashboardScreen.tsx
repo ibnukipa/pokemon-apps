@@ -20,11 +20,11 @@ import Button from '../components/Button';
 import useContainer from '../hooks/useContainer';
 import PokemonCard from '../components/Pokemon/PokemonCard';
 import useInfiniteList from '../hooks/useInfiniteList';
-import getPokemons from '../sevices/getPokemons';
 import useStyles from '../hooks/useStyles';
 import bgPrimaryLight from '../assets/illustrations/backgroundPrimaryLight.png';
 import bgPrimaryDark from '../assets/illustrations/backgroundPrimaryDark.png';
 import useIsDarkMode from '../hooks/useIsDarkMode';
+import getPokemonSpecies from '../sevices/getPokemonSpecies';
 
 const DashboardScreen = () => {
   const isDarkMode = useIsDarkMode();
@@ -55,8 +55,8 @@ const DashboardScreen = () => {
     fetchMore,
     isLastPage,
   } = useInfiniteList({
-    fetcher: getPokemons,
-    model: 'pokemons',
+    fetcher: getPokemonSpecies,
+    model: 'pokemonSpecies',
   });
 
   const goToPokedexPress = useCallback(() => {
@@ -74,8 +74,8 @@ const DashboardScreen = () => {
     setHeaderLayout(event.nativeEvent.layout);
   }, []);
 
-  const renderPokemon = useCallback(({item}: any) => {
-    return <PokemonCard id={item} />;
+  const renderPokemon = useCallback(({item: itemKey}: any) => {
+    return <PokemonCard itemKey={itemKey} />;
   }, []);
 
   const renderHeader = useCallback(() => {
