@@ -29,11 +29,16 @@ type Type =
 
 type Props = {
   type: Type;
+  numCols?: number;
 };
 
-const PokemonTypePill = ({type}: Props) => {
+const PokemonTypePill = ({type, numCols = 3}: Props) => {
   return (
-    <View style={[styles.container, {backgroundColor: Colors[type]}]}>
+    <View
+      style={[
+        styles.container,
+        {backgroundColor: Colors[type], flex: 1 / numCols},
+      ]}>
       <Text
         align={'center'}
         size={'footnote'}
@@ -47,9 +52,7 @@ const PokemonTypePill = ({type}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1 / 3,
     borderRadius: getSize(25),
-    paddingHorizontal: getSize(10),
     paddingVertical: getSize(5),
     margin: getSize(4),
   },

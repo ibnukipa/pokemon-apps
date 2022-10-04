@@ -1,11 +1,12 @@
 import React, {PropsWithChildren, useMemo} from 'react';
-import {ScrollView, StatusBar, View} from 'react-native';
+import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import useContainer from '../hooks/useContainer';
 
 type Props = {
   withHeader?: boolean;
   mode?: 'scroll' | 'view';
   hideScrollbar?: boolean;
+  transparent?: boolean;
 };
 
 const Container = ({
@@ -13,6 +14,7 @@ const Container = ({
   withHeader = true,
   mode = 'view',
   hideScrollbar = true,
+  transparent = false,
 }: PropsWithChildren<Props>) => {
   const {
     containerStyle,
@@ -21,6 +23,7 @@ const Container = ({
     statusBarBackgroundColor,
     statusBarAnimated,
   } = useContainer(withHeader);
+
   const Wrapper = useMemo(() => {
     switch (mode) {
       case 'scroll':
@@ -32,8 +35,11 @@ const Container = ({
 
   return (
     <Wrapper
-      style={containerStyle}
-      contentContainerStyle={containerContentStyle}
+      style={[containerStyle, transparent && styles.transparent]}
+      contentContainerStyle={[
+        containerContentStyle,
+        transparent && styles.transparent,
+      ]}
       showsHorizontalScrollIndicator={!hideScrollbar}
       showsVerticalScrollIndicator={!hideScrollbar}>
       {!withHeader && (
@@ -47,5 +53,11 @@ const Container = ({
     </Wrapper>
   );
 };
+
+const styles = StyleSheet.create({
+  transparent: {
+    backgroundColor: 'transparent',
+  },
+});
 
 export default Container;

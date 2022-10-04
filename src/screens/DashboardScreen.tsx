@@ -9,7 +9,6 @@ import {
   LayoutChangeEvent,
   RefreshControl,
   ScrollView,
-  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
@@ -25,8 +24,14 @@ import bgPrimaryLight from '../assets/illustrations/backgroundPrimaryLight.png';
 import bgPrimaryDark from '../assets/illustrations/backgroundPrimaryDark.png';
 import useIsDarkMode from '../hooks/useIsDarkMode';
 import getPokemonSpecies from '../sevices/getPokemonSpecies';
+import {deviceHeight} from '../utils/getDeviceDimensions';
+import {useFocusEffect} from '@react-navigation/native';
+import {selectMenu} from '../states/reducers/menu';
+import useAppDispatch from '../hooks/useAppDispatch';
+import Menu from '../constants/Menu';
 
 const DashboardScreen = () => {
+  const dispatch = useAppDispatch();
   const isDarkMode = useIsDarkMode();
   const [pokedexLayout, setPokedexLayout] = useState<
     Partial<LayoutChangeEvent['nativeEvent']['layout']>
@@ -38,13 +43,7 @@ const DashboardScreen = () => {
   const dashboardScroller = useRef<ScrollView>(null);
 
   const {txtPrimaryStyle, bgPrimaryColor} = useStyles();
-  const {
-    containerStyle,
-    containerContentStyle,
-    statusBarStyle,
-    statusBarAnimated,
-    statusBarBackgroundColor,
-  } = useContainer(true);
+  const {containerStyle, containerContentStyle, insets} = useContainer(true);
 
   const {
     data,
@@ -93,14 +92,15 @@ const DashboardScreen = () => {
     );
   }, [dataTotal]);
 
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(selectMenu({value: Menu.HOME}));
+    }, [dispatch]),
+  );
+
   return (
     <>
       <HeaderWithMenu onLayout={onHeaderLayout} />
-      <StatusBar
-        barStyle={statusBarStyle}
-        backgroundColor={statusBarBackgroundColor}
-        animated={statusBarAnimated}
-      />
       <ScrollView
         ref={dashboardScroller}
         scrollEnabled={false}
@@ -108,7 +108,14 @@ const DashboardScreen = () => {
         showsVerticalScrollIndicator={false}
         onLayout={onPokedexLayout}>
         <View
-          style={[styles.contentContainer, {backgroundColor: bgPrimaryColor}]}>
+          style={[
+            styles.contentContainer,
+            {
+              backgroundColor: bgPrimaryColor,
+              height: deviceHeight - (headerLayout.height || 0),
+              paddingBottom: insets.bottom,
+            },
+          ]}>
           <Illustration
             source={PokemonGroups}
             width={'80%'}
@@ -142,7 +149,7 @@ const DashboardScreen = () => {
             contentContainerStyle={[
               containerContentStyle,
               {
-                paddingTop: (headerLayout.height || 0) + 20,
+                paddingTop: headerLayout.height || 0,
                 paddingBottom: headerLayout.height,
               },
               styles.pokedexContentContainer,
@@ -174,17 +181,15 @@ const DashboardScreen = () => {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    flex: 1,
     justifyContent: 'space-between',
     paddingHorizontal: getSize(24),
-    paddingVertical: getSize(40),
   },
   contentDescription: {},
   pokedexContainer: {
     backgroundColor: 'transparent',
   },
   pokedexContentContainer: {
-    paddingHorizontal: 24,
+    paddingHorizontal: getSize(24),
   },
   pokedexImageBg: {
     width: '100%',
@@ -193,7 +198,7 @@ const styles = StyleSheet.create({
   },
   pokedexHeader: {
     alignItems: 'center',
-    marginBottom: 25,
+    marginVertical: getSize(25),
   },
   loaderContainer: {
     flexDirection: 'row',

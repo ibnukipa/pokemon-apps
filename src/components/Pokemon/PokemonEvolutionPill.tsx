@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     position: 'absolute',
-    right: -getSize(20),
+    right: -getSize(40),
   },
 });
 

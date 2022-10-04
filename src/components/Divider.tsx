@@ -1,14 +1,19 @@
 import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import getSize from '../utils/getSize';
+import useStyles from '../hooks/useStyles';
 
 type Size = 'small' | 'regular' | 'large' | 'extra-large';
+type Variant = 'line' | 'margin';
 
 type Props = {
   size?: Size;
+  variant?: Variant;
 };
 
-const Divider = ({size}: Props) => {
+const Divider = ({size, variant = 'margin'}: Props) => {
+  const {txtSecondaryStyle} = useStyles();
+
   const sizeStyle = useMemo(() => {
     switch (size) {
       case 'small':
@@ -22,7 +27,20 @@ const Divider = ({size}: Props) => {
     }
   }, [size]);
 
-  return <View style={[sizeStyle]} />;
+  const variantStyle = useMemo(() => {
+    switch (variant) {
+      case 'line':
+        return styles.line;
+      default:
+        return styles.margin;
+    }
+  }, [variant]);
+
+  return (
+    <View
+      style={[sizeStyle, variantStyle, {borderColor: txtSecondaryStyle.color}]}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
@@ -38,6 +56,10 @@ const styles = StyleSheet.create({
   extraLarge: {
     marginVertical: getSize(16),
   },
+  line: {
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  margin: {},
 });
 
 export default Divider;

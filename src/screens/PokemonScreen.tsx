@@ -4,7 +4,7 @@ import Illustration from '../components/Illustration';
 import {FlatList, StyleSheet, View} from 'react-native';
 import Divider from '../components/Divider';
 import Container from '../components/Container';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useFocusEffect, useRoute} from '@react-navigation/native';
 import usePokemon from '../hooks/usePokemon';
 import Text from '../components/Text';
 import getSize from '../utils/getSize';
@@ -16,8 +16,11 @@ import PokemonSpritePill from '../components/Pokemon/PokemonSpritePill';
 import usePokemonSpecie from '../hooks/usePokemonSpecie';
 import useEvolutionChain from '../hooks/useEvolutionChain';
 import PokemonEvolutionPill from '../components/Pokemon/PokemonEvolutionPill';
+import useAppDispatch from '../hooks/useAppDispatch';
+import {selectMenu} from '../states/reducers/menu';
 
 const PokemonScreen = () => {
+  const dispatch = useAppDispatch();
   const route = useRoute<RouteProp<RouteList, 'Pokemon'>>();
 
   const {contentContainerStyle} = useStyles();
@@ -29,12 +32,13 @@ const PokemonScreen = () => {
     pokemonAbilities,
     pokemonSprites,
     pokemonStats,
+    pokemonSpecie,
   } = usePokemon(route.params?.itemKey);
 
-  const {pokemonSpecieEvoChain} = usePokemonSpecie(route.params?.itemKey);
+  const {pokemonSpecieEvoChain} = usePokemonSpecie(pokemonSpecie);
   const {evolutionChains} = useEvolutionChain(
     pokemonSpecieEvoChain,
-    route.params?.itemKey,
+    pokemonSpecie,
   );
 
   const renderAbility = useCallback((ability: any) => {
@@ -80,6 +84,12 @@ const PokemonScreen = () => {
       );
     },
     [evolutionChains.length, pokemon.name],
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(selectMenu({value: null}));
+    }, [dispatch]),
   );
 
   return (

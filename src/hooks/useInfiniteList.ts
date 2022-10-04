@@ -39,7 +39,7 @@ const useInfiniteList = ({fetcher, query, model}: Props) => {
 
           const responseData = response.data;
 
-          if (!responseData.next || isEmpty(responseData.results)) {
+          if (!responseData.next && isEmpty(responseData.results)) {
             setIsLastPage(true);
             setIsLoading(false);
             setIsFetching(false);

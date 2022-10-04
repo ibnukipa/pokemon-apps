@@ -70,6 +70,22 @@ const useStyles = () => {
     }
   }, [isDarkMode]);
 
+  const contentBackgroundStyle = useMemo(() => {
+    if (isDarkMode) {
+      return styles.contentBackgroundDark;
+    } else {
+      return styles.contentBackgroundLight;
+    }
+  }, [isDarkMode]);
+
+  const backdropStyle = useMemo(() => {
+    if (isDarkMode) {
+      return styles.backdropDark;
+    } else {
+      return styles.backdropLight;
+    }
+  }, [isDarkMode]);
+
   return {
     bgPrimaryColor,
     bgPrimaryStyle,
@@ -79,6 +95,8 @@ const useStyles = () => {
     txtSecondaryStyle,
     txtDisableStyle,
     contentContainerStyle,
+    backdropStyle,
+    contentBackgroundStyle,
   };
 };
 
@@ -118,6 +136,38 @@ const styles = StyleSheet.create({
   },
   contentContainerLight: {
     backgroundColor: Colors.black03,
+  },
+  contentBackgroundDark: {
+    backgroundColor: Colors.black80,
+    shadowColor: Colors.black80,
+    borderWidth: 1,
+    borderColor: Colors.blackLighter,
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.46,
+    shadowRadius: 11.14,
+    elevation: 17,
+  },
+  contentBackgroundLight: {
+    backgroundColor: Colors.white80,
+    shadowColor: Colors.white80,
+    borderWidth: 1,
+    borderColor: Colors.grey,
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.46,
+    shadowRadius: 11.14,
+    elevation: 17,
+  },
+  backdropDark: {
+    backgroundColor: Colors.black70,
+  },
+  backdropLight: {
+    backgroundColor: Colors.black70,
   },
 });
 
