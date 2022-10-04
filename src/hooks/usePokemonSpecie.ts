@@ -34,7 +34,7 @@ const usePokemonSpecie = (itemKey: number | string) => {
       const parts = pokemonSpecie.evolution_chain.url.split('/');
       return parts[parts.length - 2];
     }
-    return null
+    return null;
   }, [pokemonSpecie]);
 
   useEffect(() => {

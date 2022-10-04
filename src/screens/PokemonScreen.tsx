@@ -32,7 +32,10 @@ const PokemonScreen = () => {
   } = usePokemon(route.params?.itemKey);
 
   const {pokemonSpecieEvoChain} = usePokemonSpecie(route.params?.itemKey);
-  const {evolutionChains} = useEvolutionChain(pokemonSpecieEvoChain);
+  const {evolutionChains} = useEvolutionChain(
+    pokemonSpecieEvoChain,
+    route.params?.itemKey,
+  );
 
   const renderAbility = useCallback((ability: any) => {
     return (
@@ -68,10 +71,11 @@ const PokemonScreen = () => {
     ({item, index}: any) => {
       return (
         <PokemonEvolutionPill
-          itemKey={item}
+          itemKey={item.name}
+          itemNextEvolutionCount={item.nextEvolutionCount}
           index={index}
           isLastItem={evolutionChains.length - 1 === index}
-          isCurrentPokemon={item === pokemon.name}
+          isCurrentPokemon={item.name === pokemon.name}
         />
       );
     },

@@ -10,10 +10,12 @@ import ArrowRight from '../../assets/icons/arrow-right.svg';
 import Times from '../../assets/icons/times.svg';
 import Icon from '../Icon';
 import {useNavigation} from '@react-navigation/native';
+import Colors from '../../constants/Colors';
 
 type Props = {
   itemKey: string | number;
   index: number;
+  itemNextEvolutionCount: number;
   isLastItem: boolean;
   isCurrentPokemon: boolean;
 };
@@ -27,9 +29,14 @@ const PokemonEvolutionPill = ({
   const {contentContainerStyle, txtSecondaryStyle, txtPrimaryStyle} =
     useStyles();
 
-  const {pokemonSource} = usePokemon(itemKey);
+  const {pokemonSource, pokemonTypes} = usePokemon(itemKey);
 
   const borderColor = useMemo(() => {
+    // @ts-ignore
+    return Colors[pokemonTypes[0]];
+  }, [pokemonTypes]);
+
+  const textColor = useMemo(() => {
     if (isCurrentPokemon) {
       return txtPrimaryStyle.color;
     } else {
@@ -45,12 +52,12 @@ const PokemonEvolutionPill = ({
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={pokemonPress}
-      style={styles.container}>
+      style={[styles.container]}>
       <View style={styles.contentContainer}>
         <View
           style={[styles.illustration, {borderColor}, contentContainerStyle]}>
           <Illustration
-            opacity={!isCurrentPokemon ? 0.8 : 1}
+            opacity={!isCurrentPokemon ? 0.7 : 1}
             source={pokemonSource}
             aspectRatio={1}
           />
@@ -63,7 +70,7 @@ const PokemonEvolutionPill = ({
           />
         </View>
       </View>
-      <Text style={{color: borderColor}} size={'caption2'} weight={'medium'}>
+      <Text style={{color: textColor}} size={'caption2'} weight={'medium'}>
         {startCase(itemKey.toString())}
       </Text>
     </TouchableOpacity>
