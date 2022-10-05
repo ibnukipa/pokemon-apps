@@ -4,14 +4,17 @@ import useIsDarkMode from './useIsDarkMode';
 import useStyles from './useStyles';
 import {StatusBarStyle, StyleSheet} from 'react-native';
 
-const useContainer: (withHeader?: boolean) => {
+const useContainer: (
+  withHeader?: boolean,
+  inModal?: boolean,
+) => {
   containerStyle: any;
   containerContentStyle: any;
   statusBarStyle: StatusBarStyle;
   statusBarBackgroundColor: string;
   statusBarAnimated: boolean;
   insets: EdgeInsets;
-} = (withHeader = true) => {
+} = (withHeader = true, inModal = false) => {
   const insets = useSafeAreaInsets();
   const isDarkMode = useIsDarkMode();
   const {bgPrimaryStyle, bgSecondaryColor} = useStyles();
@@ -22,10 +25,10 @@ const useContainer: (withHeader?: boolean) => {
 
   const containerContentStyle = useMemo(() => {
     return [
-      !withHeader && {paddingTop: insets.top},
+      !withHeader && !inModal && {paddingTop: insets.top},
       {paddingBottom: insets.bottom},
     ];
-  }, [insets.bottom, insets.top, withHeader]);
+  }, [inModal, insets.bottom, insets.top, withHeader]);
 
   const statusBarStyle = useMemo(() => {
     return isDarkMode ? 'light-content' : 'dark-content';

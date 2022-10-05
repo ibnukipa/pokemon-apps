@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useMemo} from 'react';
+import React, {memo, useMemo} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Text from '../Text';
 import useIsDarkMode from '../../hooks/useIsDarkMode';
@@ -10,7 +10,6 @@ import Divider from '../Divider';
 import PokemonTypePill from './PokemonTypePill';
 import LoadingFill from '../LoadingFill';
 import usePokemon from '../../hooks/usePokemon';
-import {useNavigation} from '@react-navigation/native';
 import useStyles from '../../hooks/useStyles';
 
 type Props = {
@@ -19,7 +18,6 @@ type Props = {
 
 const PokemonCard = memo(({itemKey}: Props) => {
   const isDarkMode = useIsDarkMode();
-  const navigation = useNavigation<RouteScreenNavigationProp>();
 
   const {contentContainerStyle} = useStyles();
   const {
@@ -28,11 +26,8 @@ const PokemonCard = memo(({itemKey}: Props) => {
     pokemonCode,
     pokemonTypes,
     pokemonIsLoading,
+    pokemonPress,
   } = usePokemon(itemKey);
-
-  const pokemonPress = useCallback(() => {
-    navigation.push('Pokemon', {itemKey});
-  }, [itemKey, navigation]);
 
   const containerStyle = useMemo(() => {
     if (isDarkMode) {

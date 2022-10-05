@@ -1,9 +1,10 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import getSize from '../../utils/getSize';
 import Colors from '../../constants/Colors';
 import Text from '../Text';
 import {startCase} from 'lodash';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 
 type Type =
   | 'bug'
@@ -30,11 +31,25 @@ type Type =
 type Props = {
   type: Type;
   numCols?: number;
+  inModal?: boolean;
 };
 
-const PokemonTypePill = ({type, numCols = 3}: Props) => {
+const PokemonTypePill = ({type, numCols = 3, inModal = false}: Props) => {
+  const route = useRoute<RouteProp<RouteList, 'PokemonType'>>();
+  const navigation = useNavigation<RouteScreenNavigationProp>();
+  const onPress = useCallback(() => {
+    if (route.params?.type !== type) {
+      if (inModal) {
+        navigation.goBack();
+      }
+      navigation.push('PokemonType', {type});
+    }
+  }, [inModal, route.params?.type, type, navigation]);
+
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
       style={[
         styles.container,
         {backgroundColor: Colors[type], flex: 1 / numCols},
@@ -46,7 +61,7 @@ const PokemonTypePill = ({type, numCols = 3}: Props) => {
         style={styles.text}>
         {startCase(type)}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

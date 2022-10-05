@@ -7,6 +7,7 @@ type Props = {
   mode?: 'scroll' | 'view';
   hideScrollbar?: boolean;
   transparent?: boolean;
+  inModal?: boolean;
 };
 
 const Container = ({
@@ -15,6 +16,7 @@ const Container = ({
   mode = 'view',
   hideScrollbar = true,
   transparent = false,
+  inModal = false,
 }: PropsWithChildren<Props>) => {
   const {
     containerStyle,
@@ -22,7 +24,7 @@ const Container = ({
     statusBarStyle,
     statusBarBackgroundColor,
     statusBarAnimated,
-  } = useContainer(withHeader);
+  } = useContainer(withHeader, inModal);
 
   const Wrapper = useMemo(() => {
     switch (mode) {

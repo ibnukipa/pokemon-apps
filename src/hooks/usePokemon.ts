@@ -1,11 +1,12 @@
 import {ImageProps} from 'react-native';
-import {useEffect, useMemo} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 import Logo from '../assets/logo.png';
 import {isEmpty, padStart, startCase} from 'lodash';
 import useAppSelector from './useAppSelector';
 import {getByIdSelector} from '../states/reducers/db';
 import useData from './useData';
 import getPokemon from '../sevices/getPokemon';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 
 const OMITTED_ATTRS = [
   'forms',
@@ -16,6 +17,9 @@ const OMITTED_ATTRS = [
 ];
 
 const usePokemon = (itemKey: number | string) => {
+  const route = useRoute<RouteProp<RouteList, 'Pokemon'>>();
+  const navigation = useNavigation<RouteScreenNavigationProp>();
+
   const pokemon = useAppSelector(state =>
     getByIdSelector(state, {model: 'pokemons', id: itemKey}),
   );
@@ -103,6 +107,12 @@ const usePokemon = (itemKey: number | string) => {
     return pokemon.species?.name;
   }, [pokemon]);
 
+  const pokemonPress = useCallback(() => {
+    if (route.params?.itemKey !== itemKey) {
+      navigation.push('Pokemon', {itemKey});
+    }
+  }, [itemKey, navigation, route.params?.itemKey]);
+
   useEffect(() => {
     if (!pokemon.height || !pokemon.weight) {
       refresh();
@@ -119,6 +129,7 @@ const usePokemon = (itemKey: number | string) => {
     pokemonSprites,
     pokemonStats,
     pokemonSpecie,
+    pokemonPress,
     pokemonIsLoading: isLoading,
     pokemonRefresh: refresh,
   };

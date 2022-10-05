@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Text from '../Text';
 import Colors from '../../constants/Colors';
@@ -9,7 +9,6 @@ import Divider from '../Divider';
 import PokemonTypePill from './PokemonTypePill';
 import LoadingFill from '../LoadingFill';
 import usePokemon from '../../hooks/usePokemon';
-import {useNavigation} from '@react-navigation/native';
 import useStyles from '../../hooks/useStyles';
 
 type Props = {
@@ -17,8 +16,6 @@ type Props = {
 };
 
 const PokemonSnippet = memo(({itemKey}: Props) => {
-  const navigation = useNavigation<RouteScreenNavigationProp>();
-
   const {txtDisableStyle} = useStyles();
   const {
     pokemonSource,
@@ -26,11 +23,8 @@ const PokemonSnippet = memo(({itemKey}: Props) => {
     pokemonCode,
     pokemonTypes,
     pokemonIsLoading,
+    pokemonPress,
   } = usePokemon(itemKey);
-
-  const pokemonPress = useCallback(() => {
-    navigation.push('Pokemon', {itemKey});
-  }, [itemKey, navigation]);
 
   return (
     <TouchableOpacity

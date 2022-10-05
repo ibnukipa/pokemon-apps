@@ -60,6 +60,7 @@ const PokemonTypePagination = ({
   const renderPaginationItem = useCallback(
     (value: any, isPlain: boolean = false, disabled: boolean = false) => {
       const isActive = Number(value) === page;
+
       const onPress = () => {
         if (!isPlain && value !== '>' && value !== '<') {
           setPage(Number(value));
@@ -69,8 +70,10 @@ const PokemonTypePagination = ({
           setPage((curPage: number) => curPage - 1);
         }
       };
+
       return (
         <TouchableOpacity
+          key={value}
           disabled={disabled || totalData === 0}
           activeOpacity={0.7}
           onPress={onPress}

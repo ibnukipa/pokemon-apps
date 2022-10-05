@@ -52,7 +52,7 @@ const PokemonScreen = () => {
   }, []);
 
   const renderType = useCallback(
-    ({item}: any) => <PokemonTypePill key={item} type={item} />,
+    ({item}: any) => <PokemonTypePill key={item} type={item} inModal={true} />,
     [],
   );
 
@@ -94,9 +94,9 @@ const PokemonScreen = () => {
 
   return (
     <>
-      <HeaderWithMenu />
-      <Container mode={'scroll'}>
-        <Divider size={'extra-large'} />
+      <HeaderWithMenu inModal={true} />
+      <Container mode={'scroll'} withHeader={false} inModal={true}>
+        <Divider />
         <View style={styles.contentContainer}>
           <Text weight={'bold'} size={'extra-heading'}>
             {pokemonName}

@@ -19,15 +19,18 @@ import Colors from '../constants/Colors';
 import MenuItem from './Menu/MenuItem';
 import Divider from './Divider';
 import useMenu from '../hooks/useMenu';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   title?: string;
   subtitle?: string;
   onLayout?: (event: LayoutChangeEvent) => void;
+  inModal?: boolean;
 };
 
-const HeaderWithMenu = ({onLayout}: Props) => {
+const HeaderWithMenu = ({onLayout, inModal = false}: Props) => {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
 
   const isDarkMode = useIsDarkMode();
   const {bgPrimaryColor, backdropStyle} = useStyles();
@@ -44,8 +47,12 @@ const HeaderWithMenu = ({onLayout}: Props) => {
   );
 
   const toggleMenuPress = useCallback(() => {
-    setIsMenuShown(active => !active);
-  }, []);
+    if (inModal) {
+      navigation.goBack();
+    } else {
+      setIsMenuShown(active => !active);
+    }
+  }, [inModal, navigation]);
 
   const renderMenuItem = useCallback(
     ({item}: {item: MenuItemType}) => {
@@ -73,9 +80,9 @@ const HeaderWithMenu = ({onLayout}: Props) => {
         style={[
           styles.container,
           {
-            paddingTop: insets.top,
             backgroundColor: bgPrimaryColor,
           },
+          !inModal && {paddingTop: insets.top},
         ]}>
         <Illustration
           align={'center'}
@@ -85,7 +92,7 @@ const HeaderWithMenu = ({onLayout}: Props) => {
         />
         <Icon
           onPress={toggleMenuPress}
-          Svg={isMenuShown ? Times : Bars}
+          Svg={isMenuShown || inModal ? Times : Bars}
           variant={'secondary'}
         />
       </View>

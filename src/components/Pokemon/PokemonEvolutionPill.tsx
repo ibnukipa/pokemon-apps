@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import getSize from '../../utils/getSize';
 import Text from '../Text';
@@ -9,7 +9,6 @@ import usePokemon from '../../hooks/usePokemon';
 import ArrowRight from '../../assets/icons/arrow-right.svg';
 import Times from '../../assets/icons/times.svg';
 import Icon from '../Icon';
-import {useNavigation} from '@react-navigation/native';
 import Colors from '../../constants/Colors';
 
 type Props = {
@@ -25,11 +24,10 @@ const PokemonEvolutionPill = ({
   isLastItem,
   isCurrentPokemon,
 }: Props) => {
-  const navigation = useNavigation<RouteScreenNavigationProp>();
   const {contentContainerStyle, txtSecondaryStyle, txtPrimaryStyle} =
     useStyles();
 
-  const {pokemonSource, pokemonTypes} = usePokemon(itemKey);
+  const {pokemonSource, pokemonTypes, pokemonPress} = usePokemon(itemKey);
 
   const borderColor = useMemo(() => {
     // @ts-ignore
@@ -43,10 +41,6 @@ const PokemonEvolutionPill = ({
       return txtSecondaryStyle.color;
     }
   }, [isCurrentPokemon, txtPrimaryStyle.color, txtSecondaryStyle.color]);
-
-  const pokemonPress = useCallback(() => {
-    navigation.push('Pokemon', {itemKey});
-  }, [itemKey, navigation]);
 
   return (
     <TouchableOpacity
