@@ -40,7 +40,7 @@ const usePokemon = (itemKey: number | string) => {
         uri: pokemonUri,
       };
     }
-  }, [isLoading, pokemon.sprites?.other]);
+  }, [isLoading, pokemon.sprites?.front_default, pokemon.sprites?.other]);
 
   const pokemonCode: string = useMemo(() => {
     return `#${padStart(isLoading ? '0' : pokemon.id, 4, '0')}`;
