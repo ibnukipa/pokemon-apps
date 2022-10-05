@@ -45,7 +45,7 @@ const PokemonEvolutionPill = ({
   }, [isCurrentPokemon, txtPrimaryStyle.color, txtSecondaryStyle.color]);
 
   const pokemonPress = useCallback(() => {
-    navigation.navigate('Pokemon', {itemKey});
+    navigation.push('Pokemon', {itemKey});
   }, [itemKey, navigation]);
 
   return (

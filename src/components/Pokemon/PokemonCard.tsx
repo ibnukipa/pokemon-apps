@@ -31,7 +31,7 @@ const PokemonCard = memo(({itemKey}: Props) => {
   } = usePokemon(itemKey);
 
   const pokemonPress = useCallback(() => {
-    navigation.navigate('Pokemon', {itemKey});
+    navigation.push('Pokemon', {itemKey});
   }, [itemKey, navigation]);
 
   const containerStyle = useMemo(() => {
