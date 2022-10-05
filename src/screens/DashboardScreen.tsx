@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import HeaderWithMenu from '../components/HeaderWithMenu';
 import Illustration from '../components/Illustration';
 import PokemonGroups from '../assets/illustrations/pokemonGroups.png';
@@ -9,6 +9,7 @@ import {
   LayoutChangeEvent,
   RefreshControl,
   ScrollView,
+  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
@@ -24,11 +25,14 @@ import bgPrimaryLight from '../assets/illustrations/backgroundPrimaryLight.png';
 import bgPrimaryDark from '../assets/illustrations/backgroundPrimaryDark.png';
 import useIsDarkMode from '../hooks/useIsDarkMode';
 import getPokemonSpecies from '../sevices/getPokemonSpecies';
-import {deviceHeight} from '../utils/getDeviceDimensions';
+import {deviceHeight, deviceWidth} from '../utils/getDeviceDimensions';
 import {useFocusEffect} from '@react-navigation/native';
 import {selectMenu} from '../states/reducers/menu';
 import useAppDispatch from '../hooks/useAppDispatch';
 import Menu from '../constants/Menu';
+
+const BG_WIDTH_RATIO = 512;
+const BG_HEIGHT_RATIO = 1143;
 
 const DashboardScreen = () => {
   const dispatch = useAppDispatch();
@@ -60,10 +64,10 @@ const DashboardScreen = () => {
 
   const goToPokedexPress = useCallback(() => {
     dashboardScroller.current?.scrollTo({
-      y: (pokedexLayout?.height || 0) + (headerLayout?.height || 0),
+      y: pokedexLayout?.height || 0,
       animated: true,
     });
-  }, [pokedexLayout, headerLayout]);
+  }, [pokedexLayout]);
 
   const onPokedexLayout = useCallback((event: LayoutChangeEvent) => {
     setPokedexLayout(event.nativeEvent.layout);
@@ -92,6 +96,10 @@ const DashboardScreen = () => {
     );
   }, [dataTotal]);
 
+  const bgPokedexHeight = useMemo(() => {
+    return (deviceWidth / BG_WIDTH_RATIO) * BG_HEIGHT_RATIO;
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
       dispatch(selectMenu({value: Menu.HOME}));
@@ -111,9 +119,12 @@ const DashboardScreen = () => {
           style={[
             styles.contentContainer,
             {
+              height:
+                deviceHeight -
+                (headerLayout.height || 0) -
+                (StatusBar.currentHeight || 0),
               backgroundColor: bgPrimaryColor,
-              height: deviceHeight - (headerLayout.height || 0),
-              paddingBottom: insets.bottom,
+              paddingBottom: insets.bottom + getSize(20),
             },
           ]}>
           <Illustration
@@ -141,18 +152,24 @@ const DashboardScreen = () => {
         </View>
         <ImageBackground
           source={isDarkMode ? bgPrimaryDark : bgPrimaryLight}
-          style={styles.pokedexImageBg}
+          style={[
+            styles.pokedexImageBg,
+            {
+              paddingBottom:
+                bgPokedexHeight -
+                (deviceHeight -
+                  ((headerLayout.height || 0) +
+                    (StatusBar.currentHeight || 0))),
+            },
+          ]}
           resizeMode={'contain'}>
           <FlatList
             ref={pokedexScroller}
             style={[containerStyle, styles.pokedexContainer]}
             contentContainerStyle={[
               containerContentStyle,
-              {
-                paddingTop: headerLayout.height || 0,
-                paddingBottom: headerLayout.height,
-              },
               styles.pokedexContentContainer,
+              {padddingBottom: insets.bottom},
             ]}
             showsVerticalScrollIndicator={false}
             data={data}
@@ -194,7 +211,7 @@ const styles = StyleSheet.create({
   pokedexImageBg: {
     width: '100%',
     height: undefined,
-    aspectRatio: 512 / 1143,
+    aspectRatio: BG_WIDTH_RATIO / BG_HEIGHT_RATIO,
   },
   pokedexHeader: {
     alignItems: 'center',

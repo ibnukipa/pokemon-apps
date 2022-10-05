@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: getSize(4),
+    borderWidth: 4,
     borderRadius: 100,
     margin: getSize(4),
   },

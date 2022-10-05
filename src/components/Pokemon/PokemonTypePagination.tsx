@@ -61,12 +61,12 @@ const PokemonTypePagination = ({
     (value: any, isPlain: boolean = false, disabled: boolean = false) => {
       const isActive = Number(value) === page;
       const onPress = () => {
-        if (!isPlain || value !== '>' || value !== '<') {
+        if (!isPlain && value !== '>' && value !== '<') {
           setPage(Number(value));
         } else if (value === '>') {
-          setPage(page + 1);
+          setPage((curPage: number) => curPage + 1);
         } else if (value === '<') {
-          setPage(page - 1);
+          setPage((curPage: number) => curPage - 1);
         }
       };
       return (
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
   totalData: {},
   pageDropdown: {
     padding: getSize(5),
+    paddingHorizontal: getSize(10),
     marginLeft: getSize(5),
     flexDirection: 'row',
     alignItems: 'center',
@@ -177,13 +178,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    padding: getSize(3),
+    padding: getSize(5),
     borderRadius: 8,
     marginBottom: getSize(25),
   },
   pageDropdownItem: {
-    padding: getSize(4),
-    paddingVertical: getSize(0),
+    paddingVertical: getSize(2),
+    paddingHorizontal: getSize(5),
     marginVertical: getSize(2),
     borderRadius: 4,
   },
@@ -216,7 +217,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: getSize(4),
     justifyContent: 'center',
-    paddingVertical: getSize(2),
+    alignItems: 'center',
+    paddingVertical: getSize(4),
+    paddingTop: getSize(6),
   },
   paginationItemPlain: {
     borderColor: 'transparent',

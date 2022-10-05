@@ -30,7 +30,8 @@ const usePokemon = (itemKey: number | string) => {
   const pokemonSource: ImageProps['source'] = useMemo(() => {
     const pokemonUri =
       pokemon.sprites?.other?.['official-artwork']?.front_default ||
-      pokemon.sprites?.other?.home.front_default;
+      pokemon.sprites?.other?.home.front_default ||
+      pokemon.sprites?.front_default;
 
     if (isLoading || !pokemonUri) {
       return Logo;

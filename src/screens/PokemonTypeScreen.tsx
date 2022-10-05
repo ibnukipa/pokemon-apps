@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import HeaderWithMenu from '../components/HeaderWithMenu';
 import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 import useContainer from '../hooks/useContainer';
@@ -9,48 +9,14 @@ import useAppDispatch from '../hooks/useAppDispatch';
 import Colors from '../constants/Colors';
 import Background from '../assets/illustrations/backgroundPokemonType.svg';
 import Text from '../components/Text';
-import {slice, startCase} from 'lodash';
+import {startCase} from 'lodash';
 import getSize from '../utils/getSize';
 import Divider from '../components/Divider';
 import Container from '../components/Container';
 import PokemonSnippet from '../components/Pokemon/PokemonSnippet';
 import usePokemonType from '../hooks/usePokemonType';
 import PokemonTypePagination from '../components/Pokemon/PokemonTypePagination';
-
-const usePagination = (data: any) => {
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(5);
-  const [totalPage, setTotalPage] = useState(1);
-  const [totalData, setTotalData] = useState(null);
-
-  useEffect(() => {
-    if (data.length >= 0) {
-      setPage(1);
-      setTotalData(data.length);
-    }
-  }, [data.length]);
-
-  useEffect(() => {
-    if (totalData !== null) {
-      setTotalPage(Math.floor((totalData - 1) / perPage + 1));
-    }
-  }, [totalData, perPage]);
-
-  const displayedData = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    return slice(data, startIndex, startIndex + perPage);
-  }, [data, page, perPage]);
-
-  return {
-    page,
-    perPage,
-    totalPage,
-    totalData,
-    displayedData,
-    setPerPage,
-    setPage,
-  };
-};
+import usePagination from '../hooks/usePagination';
 
 const PokemonTypeScreen = () => {
   const route = useRoute<RouteProp<RouteList, 'PokemonType'>>();
@@ -152,6 +118,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     borderRadius: getSize(24),
     marginHorizontal: getSize(24),
+    marginBottom: getSize(24),
     padding: getSize(20),
   },
   content: {

@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     marginRight: getSize(20),
   },
   illustration: {
-    borderWidth: getSize(1),
+    borderWidth: 1,
     borderRadius: 100,
     padding: getSize(10),
   },
