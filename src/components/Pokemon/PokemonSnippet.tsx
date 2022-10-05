@@ -1,7 +1,6 @@
-import React, {memo, useCallback, useMemo} from 'react';
+import React, {memo, useCallback} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Text from '../Text';
-import useIsDarkMode from '../../hooks/useIsDarkMode';
 import Colors from '../../constants/Colors';
 import getSize from '../../utils/getSize';
 import Illustration from '../Illustration';
@@ -17,11 +16,10 @@ type Props = {
   itemKey: number | string;
 };
 
-const PokemonCard = memo(({itemKey}: Props) => {
-  const isDarkMode = useIsDarkMode();
+const PokemonSnippet = memo(({itemKey}: Props) => {
   const navigation = useNavigation<RouteScreenNavigationProp>();
 
-  const {contentContainerStyle} = useStyles();
+  const {txtDisableStyle} = useStyles();
   const {
     pokemonSource,
     pokemonName,
@@ -34,28 +32,19 @@ const PokemonCard = memo(({itemKey}: Props) => {
     navigation.push('Pokemon', {itemKey});
   }, [itemKey, navigation]);
 
-  const containerStyle = useMemo(() => {
-    if (isDarkMode) {
-      return styles.containerDark;
-    } else {
-      return styles.containerLight;
-    }
-  }, [isDarkMode]);
-
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={pokemonPress}
-      style={[styles.container, containerStyle]}>
-      <View style={styles.illustrationContainer}>
-        <Illustration
-          width={'80%'}
-          align={'center'}
-          source={pokemonSource}
-          aspectRatio={1}
-        />
-      </View>
-      <View style={[styles.contentContainer, contentContainerStyle]}>
+      style={[styles.container]}>
+      <Illustration
+        width={'30%'}
+        align={'center'}
+        source={pokemonSource}
+        aspectRatio={1}
+      />
+      <View
+        style={[styles.contentContainer, {borderColor: txtDisableStyle.color}]}>
         <Text variant={'secondary'} size={'subhead'} weight={'bold'}>
           {pokemonCode}
         </Text>
@@ -71,9 +60,9 @@ const PokemonCard = memo(({itemKey}: Props) => {
                 data={pokemonTypes}
                 style={styles.typeContainer}
                 renderItem={({item}) => (
-                  <PokemonTypePill key={item} type={item} />
+                  <PokemonTypePill numCols={2} key={item} type={item} />
                 )}
-                numColumns={3}
+                numColumns={2}
               />
             </View>
           </>
@@ -86,7 +75,7 @@ const PokemonCard = memo(({itemKey}: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: getSize(24),
+    flexDirection: 'row',
   },
   containerDark: {
     backgroundColor: Colors.blackLighter,
@@ -98,14 +87,15 @@ const styles = StyleSheet.create({
     marginTop: getSize(25),
   },
   contentContainer: {
+    flex: 1,
     marginHorizontal: getSize(10),
-    marginBottom: getSize(10),
-    padding: getSize(15),
-    borderRadius: getSize(15),
+    marginVertical: getSize(10),
+    paddingHorizontal: getSize(15),
+    borderLeftWidth: 1,
   },
   typeContainer: {
     marginHorizontal: -getSize(4),
   },
 });
 
-export default PokemonCard;
+export default PokemonSnippet;

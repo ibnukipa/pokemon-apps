@@ -29,7 +29,10 @@ const usePokemon = (itemKey: number | string) => {
 
   const pokemonSource: ImageProps['source'] = useMemo(() => {
     const pokemonUri =
-      pokemon.sprites?.other?.['official-artwork']?.front_default;
+      pokemon.sprites?.other?.['official-artwork']?.front_default ||
+      pokemon.sprites?.other?.home.front_default ||
+      pokemon.sprites?.front_default;
+
     if (isLoading || !pokemonUri) {
       return Logo;
     } else {
@@ -37,7 +40,7 @@ const usePokemon = (itemKey: number | string) => {
         uri: pokemonUri,
       };
     }
-  }, [isLoading, pokemon.sprites?.other]);
+  }, [isLoading, pokemon.sprites?.front_default, pokemon.sprites?.other]);
 
   const pokemonCode: string = useMemo(() => {
     return `#${padStart(isLoading ? '0' : pokemon.id, 4, '0')}`;
@@ -96,6 +99,10 @@ const usePokemon = (itemKey: number | string) => {
     }
   }, [pokemon.stats]);
 
+  const pokemonSpecie = useMemo(() => {
+    return pokemon.species?.name;
+  }, [pokemon]);
+
   useEffect(() => {
     if (!pokemon.height || !pokemon.weight) {
       refresh();
@@ -111,6 +118,7 @@ const usePokemon = (itemKey: number | string) => {
     pokemonAbilities,
     pokemonSprites,
     pokemonStats,
+    pokemonSpecie,
     pokemonIsLoading: isLoading,
     pokemonRefresh: refresh,
   };

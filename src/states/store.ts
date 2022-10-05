@@ -1,6 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import ReduxFlipper from 'redux-flipper';
 import db from './reducers/db';
+import menu from './reducers/menu';
 
 let reduxDebuggerFlipper: any = null;
 if (__DEV__) {
@@ -11,6 +12,7 @@ if (__DEV__) {
 const store = configureStore({
   reducer: {
     db,
+    menu,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(reduxDebuggerFlipper),

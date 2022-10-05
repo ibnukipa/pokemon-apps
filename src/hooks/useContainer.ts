@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets, EdgeInsets} from 'react-native-safe-area-context';
 import useIsDarkMode from './useIsDarkMode';
 import useStyles from './useStyles';
 import {StatusBarStyle, StyleSheet} from 'react-native';
@@ -10,6 +10,7 @@ const useContainer: (withHeader?: boolean) => {
   statusBarStyle: StatusBarStyle;
   statusBarBackgroundColor: string;
   statusBarAnimated: boolean;
+  insets: EdgeInsets;
 } = (withHeader = true) => {
   const insets = useSafeAreaInsets();
   const isDarkMode = useIsDarkMode();
@@ -31,6 +32,7 @@ const useContainer: (withHeader?: boolean) => {
   }, [isDarkMode]);
 
   return {
+    insets,
     containerStyle,
     containerContentStyle,
     statusBarStyle,

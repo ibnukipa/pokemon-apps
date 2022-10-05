@@ -2,6 +2,9 @@ type RouteList = {
   Pokemon: {
     itemKey: number;
   };
+  PokemonType: {
+    type: string;
+  };
 };
 
 type RouteScreenNavigationProp = CompositeNavigationProp<

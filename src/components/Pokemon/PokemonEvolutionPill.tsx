@@ -45,7 +45,7 @@ const PokemonEvolutionPill = ({
   }, [isCurrentPokemon, txtPrimaryStyle.color, txtSecondaryStyle.color]);
 
   const pokemonPress = useCallback(() => {
-    navigation.navigate('Pokemon', {itemKey});
+    navigation.push('Pokemon', {itemKey});
   }, [itemKey, navigation]);
 
   return (
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     marginRight: getSize(20),
   },
   illustration: {
-    borderWidth: getSize(1),
+    borderWidth: 1,
     borderRadius: 100,
     padding: getSize(10),
   },
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     position: 'absolute',
-    right: -getSize(20),
+    right: -getSize(40),
   },
 });
 

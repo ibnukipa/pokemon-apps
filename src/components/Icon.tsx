@@ -1,7 +1,12 @@
 import React, {useMemo} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 import useStyles from '../hooks/useStyles';
+import getSize from '../utils/getSize';
 
 type Variant = 'primary' | 'secondary';
 
@@ -9,9 +14,11 @@ type Props = {
   Svg: React.FC<SvgProps>;
   variant?: Variant;
   disabled?: boolean;
+  onPress?: TouchableOpacityProps['onPress'];
+  color?: string;
 };
 
-const Icon = ({variant, disabled, Svg}: Props) => {
+const Icon = ({variant, disabled, Svg, onPress, color}: Props) => {
   const {txtPrimaryStyle, txtSecondaryStyle, txtDisableStyle} = useStyles();
   const variantStyle = useMemo(() => {
     switch (variant) {
@@ -23,10 +30,25 @@ const Icon = ({variant, disabled, Svg}: Props) => {
   }, [txtPrimaryStyle, txtSecondaryStyle, variant]);
 
   return (
-    <TouchableOpacity activeOpacity={0.7}>
-      <Svg fill={disabled ? txtDisableStyle.color : variantStyle.color} />
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={onPress}
+      style={styles.container}>
+      <Svg
+        fill={
+          color ? color : disabled ? txtDisableStyle.color : variantStyle.color
+        }
+      />
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: getSize(20), // TODO move this padding to icon.size
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default Icon;
