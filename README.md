@@ -1,8 +1,10 @@
 # Pokemon Apps
 
 ### iOS Preview
+https://youtu.be/eR3lDgRNZ6g
 
 ### Android Preview
+https://youtu.be/To_jttO83kg
 
 ### Features
 
